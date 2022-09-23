@@ -12,8 +12,8 @@ while True:
     creds_service = ServiceAccountCredentials.from_json_keyfile_name(creds_json, scopes).authorize(httplib2.Http())
     service = build('sheets', 'v4', http=creds_service)
     sheet = service.spreadsheets()
-    sheet_id = "1i0Zy82V9kmvR0YuFJeYRrCG_QeAzC5a-tTo0ZG5KzWE"
-    read = sheet.values().get(spreadsheetId=sheet_id, range="Регистрация!A1:V").execute()
+    sheet_id = "тут id листа откуда читают"
+    read = sheet.values().get(spreadsheetId=sheet_id, range="...!A1:V").execute()
     array = {}
     # Считывание таблицы и записывание в словарь, где ключ - оп, значение - список людей
     for i in read["values"]:
@@ -28,7 +28,7 @@ while True:
     if mode == "1":
         #Очиcтка листа ОП
         sheet.values().clear(
-            spreadsheetId="1qCqS-gDxqhrrtnQrPzRWd7_HiR8xCBI88nCHGZ2J_Uc",
+            spreadsheetId="id листа куда писать",
             range="ОП"
         ).execute()
 
@@ -37,12 +37,12 @@ while True:
         for i in keys:
             time.sleep(1)
             resp = sheet.values().update(
-                spreadsheetId="1qCqS-gDxqhrrtnQrPzRWd7_HiR8xCBI88nCHGZ2J_Uc",
+                spreadsheetId="",
                 range='ОП!A' + str(count),
                 valueInputOption='RAW',
                 body={'values': [[i]]}).execute()
             resp = sheet.values().update(
-                spreadsheetId="1qCqS-gDxqhrrtnQrPzRWd7_HiR8xCBI88nCHGZ2J_Uc",
+                spreadsheetId="",
                 range='ОП!B'+str(count),
                 valueInputOption='RAW',
                 body={'values': [array[i]]}).execute()
@@ -94,7 +94,7 @@ while True:
         #Очиста листа Команды
         keys = list(array.keys())
         sheet.values().clear(
-            spreadsheetId="1qCqS-gDxqhrrtnQrPzRWd7_HiR8xCBI88nCHGZ2J_Uc",
+            spreadsheetId="",
             range="Команды"
         ).execute()
         #Запись на лист по командам в вертикальном порядке, но не больше 26 команд (нужно доработать, чтобы было больше команд)
@@ -103,12 +103,12 @@ while True:
         for i in teams:
             send = [["{0} {1}".format(j[0], j[1])] for j in teams[i]]
             resp = sheet.values().update(
-                spreadsheetId="1qCqS-gDxqhrrtnQrPzRWd7_HiR8xCBI88nCHGZ2J_Uc",
+                spreadsheetId="",
                 range='Команды!' + alphabet[count] + "1",
                 valueInputOption='RAW',
                 body={'values': [[i]]}).execute()
             resp = sheet.values().update(
-                spreadsheetId="1qCqS-gDxqhrrtnQrPzRWd7_HiR8xCBI88nCHGZ2J_Uc",
+                spreadsheetId="",
                 range='Команды!' + alphabet[count] + "2",
                 valueInputOption='RAW',
                 body={'values': send}).execute()
